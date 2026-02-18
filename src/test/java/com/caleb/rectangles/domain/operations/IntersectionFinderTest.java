@@ -68,4 +68,36 @@ class IntersectionFinderTest {
         assertEquals(1, intersections.length);
     }
 
+    @ParameterizedTest
+    @CsvSource({
+            "0.0, 0.0, 3.0, 2.0,    2.0, -1.0, 1.0, 1.0",
+            "0.0, 0.0, 3.0, 2.0,    0.0, -1.0, 1.0, 1.0",
+            "0.0, 0.0, 3.0, 2.0,    0.0, 0.0, 1.0, 1.0",
+            "0.0, 0.0, 3.0, 2.0,    2.0, 0.0, 1.0, 1.0",
+    })
+    void givenTwoRectanglesWithThreePointsOfOverlap_whenFindingIntersections_ThenThereAreThreeIntersections(
+            double x1, double y1, double w1, double h1,
+            double x2, double y2, double w2, double h2
+    ) {
+        // Arrange
+        var rectangleA = new Rectangle(new Vector2(x1, y1), new Size(w1, h1));
+        var rectangleB = new Rectangle(new Vector2(x2, y2), new Size(w2, h2));
+        // Act
+        var intersections = intersectionFinder.FindAll(rectangleA, rectangleB);
+        // Assert
+        assertEquals(3, intersections.length);
+    }
+
+    @Test
+    void givenTwoRectanglesWithFourPointsOfOverlap_whenFindingIntersections_ThenThereAreFourIntersections() {
+        // Arrange
+        var rectangleA = new Rectangle(new Vector2(0.0, 0.0), new Size(3.0, 2.0));
+        var rectangleB = new Rectangle(new Vector2(0.0, 0.0), new Size(3.0, 2.0));
+        // Act
+        var intersections = intersectionFinder.FindAll(rectangleA, rectangleB);
+        // Assert
+        assertEquals(4, intersections.length);
+    }
+
+
 }

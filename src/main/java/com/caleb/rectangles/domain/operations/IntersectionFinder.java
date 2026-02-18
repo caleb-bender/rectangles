@@ -10,6 +10,14 @@ public class IntersectionFinder {
     public Vector2[] FindAll(Rectangle rectangleA, Rectangle rectangleB) {
         var intersections = new ArrayList<Vector2>();
 
+        if (rectangleA.topLeft().equals(rectangleB.topLeft()) && rectangleA.size().equals(rectangleB.size()))
+            return new Vector2[] {
+                    new Vector2(0,0),
+                    new Vector2(0,0),
+                    new Vector2(0,0),
+                    new Vector2(0,0)
+            };
+
         var rectALeftX = rectangleA.topLeft().x();
         var rectARightX = rectALeftX + rectangleA.size().width();
         var rectATopY = rectangleA.topLeft().y();

@@ -62,6 +62,31 @@ class RectangleTest {
         assertFieldErrorsArePresentForWidthAndHeight(exception);
     }
 
+    @Test
+    void whenGettingARectanglesSegments_thenTheyAreCorrect() {
+        // Arrange
+        var rectangle = new Rectangle(new Vector2(-2.0, 1.0), new Size(4.0, 2.0));
+        // Act
+        var segments = rectangle.segments();
+        // Assert
+        var expectedTop = new LineSegment(
+                LineSegment.OrthogonalAxis.Y, 1.0, new LineSegment.ParallelAxisBounds(-2.0, 2.0)
+        );
+        var expectedRight = new LineSegment(
+                LineSegment.OrthogonalAxis.X, 2.0, new LineSegment.ParallelAxisBounds(-1.0, 1.0)
+        );
+        var expectedBottom = new LineSegment(
+                LineSegment.OrthogonalAxis.Y, -1.0, new LineSegment.ParallelAxisBounds(-2.0, 2.0)
+        );
+        var expectedLeft = new LineSegment(
+                LineSegment.OrthogonalAxis.X, -2.0, new LineSegment.ParallelAxisBounds(-1.0, 1.0)
+        );
+        assertEquals(expectedTop, segments[0]);
+        assertEquals(expectedRight, segments[1]);
+        assertEquals(expectedBottom, segments[2]);
+        assertEquals(expectedLeft, segments[3]);
+    }
+
     private static void assertFieldErrorsArePresentForWidthAndHeight(InvalidRectangleException exception) {
         assertContainsFullFieldName("width", exception);
         assertFieldErrorMessageIsMustBeGreaterThanZero("width", exception);

@@ -1,48 +1,29 @@
 package com.caleb.rectangles.domain.operations;
 
+import com.caleb.rectangles.domain.LineSegment;
 import com.caleb.rectangles.domain.Rectangle;
 import com.caleb.rectangles.domain.Vector2;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class IntersectionFinder {
 
+    /**
+     * Finds all the intersections between rectangles
+     * @param rectangleA
+     * @param rectangleB
+     * @return intersections
+     */
     public Vector2[] FindAll(Rectangle rectangleA, Rectangle rectangleB) {
-        var intersections = new ArrayList<Vector2>();
+        var intersections = new HashSet<Vector2>();
 
-        if (rectangleA.topLeft().equals(rectangleB.topLeft()) && rectangleA.size().equals(rectangleB.size()))
-            return new Vector2[] {
-                    new Vector2(0,0),
-                    new Vector2(0,0),
-                    new Vector2(0,0),
-                    new Vector2(0,0)
-            };
-
-        var rectALeftX = rectangleA.topLeft().x();
-        var rectARightX = rectALeftX + rectangleA.size().width();
-        var rectATopY = rectangleA.topLeft().y();
-        var rectABottomY = rectATopY - rectangleA.size().height();
-
-        var rectBTopLeft = rectangleB.topLeft();
-        var rectBBottomRight = new Vector2(
-                rectangleB.topLeft().x() + rectangleB.size().width(),
-                   rectangleB.topLeft().y() - rectangleB.size().height()
-        );
-
-        if (rectBTopLeft.x() >= rectALeftX && rectBTopLeft.x() <= rectARightX)
-            intersections.add(new Vector2(0,0));
-
-        if (rectBTopLeft.y() < rectATopY && rectBTopLeft.y() > rectABottomY)
-            intersections.add(new Vector2(0,0));
-
-        if (rectBBottomRight.x() >= rectALeftX && rectBBottomRight.x() <= rectARightX)
-            intersections.add(new Vector2(0,0));
-
-        if (rectBBottomRight.y() < rectATopY && rectBBottomRight.y() > rectABottomY)
-            intersections.add(new Vector2(0,0));
-
-
-
+        for (LineSegment segmentA : rectangleA.segments()) {
+            for (LineSegment segmentB : rectangleB.segments()) {
+                var intersection = segmentA.intersectionWith(segmentB);
+                if (intersection.isEmpty()) continue;
+                intersections.add(intersection.get());
+            }
+        }
         return intersections.toArray(new Vector2[0]);
     }
 }

@@ -1,6 +1,5 @@
 package com.caleb.rectangles.domain;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class InvalidRectangleException extends RuntimeException {

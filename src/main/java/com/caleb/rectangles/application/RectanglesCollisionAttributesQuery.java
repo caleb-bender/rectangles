@@ -8,7 +8,8 @@ public record RectanglesCollisionAttributesQuery(
         boolean queryAdjacency
 ) {
     public record RectangleRawData(String x, String y, String w, String h) {
-        public String fieldAt(int i) {
+
+        String fieldAt(int i) {
             return switch (i) {
                 case 0 -> x();
                 case 1 -> y();

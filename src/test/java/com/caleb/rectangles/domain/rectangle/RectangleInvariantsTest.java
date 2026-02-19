@@ -75,7 +75,7 @@ class RectangleInvariantsTest {
     ) {
         var fullFieldName = "size." + fieldName;
         var actualErrorMessages = exception.invariantViolations().get(fullFieldName);
-        var expectedErrorMessage = String.format("The %s must be greater than zero.", fieldName);
+        var expectedErrorMessage = String.format("The %s must be greater than zero", fieldName);
         assertArrayEquals(new String[] {expectedErrorMessage}, actualErrorMessages);
     }
 

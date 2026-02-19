@@ -3,30 +3,32 @@ package com.caleb.rectangles.domain.operations;
 import com.caleb.rectangles.domain.LineSegment;
 import com.caleb.rectangles.domain.Rectangle;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class AdjacencyFinder implements IAdjacencyFinder {
 
-    public Optional<Adjacency> find(Rectangle rect1, Rectangle rect2) {
+    public Adjacency[] findAll(Rectangle rect1, Rectangle rect2) {
 
+        var adjacencyList = new ArrayList<Adjacency>();
         for (LineSegment segment1 : rect1.segments()) {
             for (LineSegment segment2 : rect2.segments()) {
                 if (!segmentsShareOrthogonalAxisAndConstant(segment1, segment2)) continue;
                 Optional<LineSegment> partialSegment = getPartialSegment(segment1, segment2);
                 Optional<LineSegment> subLineSegment = getSubLineSegment(segment1, segment2);
                 if (segment1.equals(segment2))
-                    return adjacencyFrom(Adjacency.Types.Proper, segment1);
+                    adjacencyList.add(adjacencyFrom(Adjacency.Types.Proper, segment1));
                 else if (subLineSegment.isPresent())
-                    return adjacencyFrom(Adjacency.Types.SubLine, subLineSegment.get());
+                    adjacencyList.add(adjacencyFrom(Adjacency.Types.SubLine, subLineSegment.get()));
                 else if (partialSegment.isPresent())
-                    return adjacencyFrom(Adjacency.Types.Partial, partialSegment.get());
+                    adjacencyList.add(adjacencyFrom(Adjacency.Types.Partial, partialSegment.get()));
             }
         }
-        return Optional.empty();
+        return adjacencyList.toArray(new Adjacency[0]);
     }
 
-    static Optional<Adjacency> adjacencyFrom(Adjacency.Types type, LineSegment segment) {
-        return Optional.of(new Adjacency(type, segment));
+    private static Adjacency adjacencyFrom(Adjacency.Types type, LineSegment segment) {
+        return new Adjacency(type, segment);
     }
 
     private boolean segmentsShareOrthogonalAxisAndConstant(LineSegment segment1, LineSegment segment2) {

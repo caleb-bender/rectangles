@@ -6,9 +6,9 @@ import java.util.Optional;
 
 public interface IAdjacencyFinder {
     /**
-     * Returns the adjacency relationship between two rectangles if there is one.
+     * Returns all the unique adjacency relationships between two rectangles if there are any
      * @param rect1
      * @param rect2
      */
-    Optional<Adjacency> find(Rectangle rect1, Rectangle rect2);
+    Adjacency[] findAll(Rectangle rect1, Rectangle rect2);
 }

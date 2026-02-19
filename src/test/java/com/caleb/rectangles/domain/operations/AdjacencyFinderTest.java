@@ -4,9 +4,13 @@ import com.caleb.rectangles.domain.LineSegment;
 import com.caleb.rectangles.domain.Rectangle;
 import com.caleb.rectangles.domain.Size;
 import com.caleb.rectangles.domain.Vector2;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import org.assertj.core.api.*;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AdjacencyFinderTest {
@@ -26,9 +30,9 @@ class AdjacencyFinderTest {
         var rect1 = new Rectangle(new Vector2(x1, y1), new Size(w1, h1));
         var rect2 = new Rectangle(new Vector2(x2, y2), new Size(w2, h2));
         // Act
-        var adjacency = adjacencyFinder.find(rect1, rect2);
+        var adjacencyList = adjacencyFinder.findAll(rect1, rect2);
         // Assert
-        assertTrue(adjacency.isEmpty());
+        assertEquals(0, adjacencyList.length);
     }
 
     @ParameterizedTest
@@ -49,11 +53,12 @@ class AdjacencyFinderTest {
         var rect2 = new Rectangle(new Vector2(x2, y2), new Size(w2, h2));
         var expectedSegment = new LineSegment(axis, constant, new LineSegment.ParallelAxisBounds(lower, upper));
         // Act
-        var adjacency = adjacencyFinder.find(rect1, rect2);
+        var adjacencyList = adjacencyFinder.findAll(rect1, rect2);
         // Assert
-        assertTrue(adjacency.isPresent());
-        assertEquals(Adjacency.Types.Proper, adjacency.get().type());
-        assertEquals(expectedSegment, adjacency.get().segment());
+        assertEquals(1, adjacencyList.length);
+        var adjacency = adjacencyList[0];
+        assertEquals(Adjacency.Types.Proper, adjacency.type());
+        assertEquals(expectedSegment, adjacency.segment());
     }
 
     @ParameterizedTest
@@ -75,11 +80,12 @@ class AdjacencyFinderTest {
         var rect2 = new Rectangle(new Vector2(x2, y2), new Size(w2, h2));
         var expectedSegment = new LineSegment(axis, constant, new LineSegment.ParallelAxisBounds(lower, upper));
         // Act
-        var adjacency = adjacencyFinder.find(rect1, rect2);
+        var adjacencyList = adjacencyFinder.findAll(rect1, rect2);
         // Assert
-        assertTrue(adjacency.isPresent());
-        assertEquals(Adjacency.Types.Partial, adjacency.get().type());
-        assertEquals(expectedSegment, adjacency.get().segment());
+        assertEquals(1, adjacencyList.length);
+        var adjacency = adjacencyList[0];
+        assertEquals(Adjacency.Types.Partial, adjacency.type());
+        assertEquals(expectedSegment, adjacency.segment());
     }
 
     @ParameterizedTest
@@ -101,10 +107,120 @@ class AdjacencyFinderTest {
         var rect2 = new Rectangle(new Vector2(x2, y2), new Size(w2, h2));
         var expectedSegment = new LineSegment(axis, constant, new LineSegment.ParallelAxisBounds(lower, upper));
         // Act
-        var adjacency = adjacencyFinder.find(rect1, rect2);
+        var adjacencyList = adjacencyFinder.findAll(rect1, rect2);
         // Assert
-        assertTrue(adjacency.isPresent());
-        assertEquals(Adjacency.Types.SubLine, adjacency.get().type());
-        assertEquals(expectedSegment, adjacency.get().segment());
+        assertEquals(1, adjacencyList.length);
+        var adjacency = adjacencyList[0];
+        assertEquals(Adjacency.Types.SubLine, adjacency.type());
+        assertEquals(expectedSegment, adjacency.segment());
     }
+
+    @Test
+    void givenOneRectangleThatSubLinesAnotherOnBothSides_whenFindingAdjacencyList_thenAdjacencyTypesAreSubLinesAndSegmentsAreCorrect() {
+        // Arrange
+        var rect1 = new Rectangle(new Vector2(0.0, 2.0), new Size(3.0, 4.0));
+        var rect2 = new Rectangle(new Vector2(0.0, 1.0), new Size(3.0, 2.0));
+        var expectedLeftSegment = new LineSegment(
+                LineSegment.OrthogonalAxis.X, 0.0,
+                new LineSegment.ParallelAxisBounds(-1.0, 1.0)
+        );
+        var expectedRightSegment = new LineSegment(
+                LineSegment.OrthogonalAxis.X, 3.0,
+                new LineSegment.ParallelAxisBounds(-1.0, 1.0)
+        );
+        // Act
+        var adjacencyList = adjacencyFinder.findAll(rect1, rect2);
+        // Assert
+        assertEquals(2, adjacencyList.length);
+        assertThat(adjacencyList).allMatch(adjacency -> {
+            return adjacency.type() == Adjacency.Types.SubLine;
+        });
+        assertThat(adjacencyList).anyMatch(adjacency -> {
+            return adjacency.segment().equals(expectedLeftSegment);
+        });
+        assertThat(adjacencyList).anyMatch(adjacency -> {
+            return adjacency.segment().equals(expectedRightSegment);
+        });
+    }
+
+    @Test
+    void givenOneRectangleThatPartialsAnotherOnBothSides_whenFindingAdjacencyList_thenAdjacencyTypesArePartialAndSegmentsAreCorrect() {
+        // Arrange
+        var rect1 = new Rectangle(new Vector2(0.0, 2.0), new Size(3.0, 4.0));
+        var rect2 = new Rectangle(new Vector2(0.0, 3.0), new Size(3.0, 2.0));
+        var expectedLeftSegment = new LineSegment(
+                LineSegment.OrthogonalAxis.X, 0.0,
+                new LineSegment.ParallelAxisBounds(1.0, 2.0)
+        );
+        var expectedRightSegment = new LineSegment(
+                LineSegment.OrthogonalAxis.X, 3.0,
+                new LineSegment.ParallelAxisBounds(1.0, 2.0)
+        );
+        // Act
+        var adjacencyList = adjacencyFinder.findAll(rect1, rect2);
+        // Assert
+        assertEquals(2, adjacencyList.length);
+        assertThat(adjacencyList).allMatch(adjacency -> {
+            return adjacency.type() == Adjacency.Types.Partial;
+        });
+        assertThat(adjacencyList).anyMatch(adjacency -> {
+            return adjacency.segment().equals(expectedLeftSegment);
+        });
+        assertThat(adjacencyList).anyMatch(adjacency -> {
+            return adjacency.segment().equals(expectedRightSegment);
+        });
+    }
+
+    @Test
+    void givenOneRectangleThatIsSubLineAndProperOnAnotherOnMultipleSides_whenFindingAdjacencyList_thenAdjacencyTypesAndSegmentsAreCorrect() {
+        // Arrange
+        var rect1 = new Rectangle(new Vector2(0.0, 2.0), new Size(3.0, 4.0));
+        var rect2 = new Rectangle(new Vector2(0.0, 2.0), new Size(3.0, 2.0));
+        var expectedLeftAdjacency = new Adjacency(Adjacency.Types.SubLine,
+                new LineSegment(
+                    LineSegment.OrthogonalAxis.X, 0.0,
+                    new LineSegment.ParallelAxisBounds(0.0, 2.0)
+                )
+        );
+        var expectedRightAdjacency = new Adjacency(Adjacency.Types.SubLine,
+                new LineSegment(
+                        LineSegment.OrthogonalAxis.X, 3.0,
+                        new LineSegment.ParallelAxisBounds(0.0, 2.0)
+                )
+        );
+        var expectedTopAdjacency = new Adjacency(Adjacency.Types.Proper,
+                new LineSegment(
+                        LineSegment.OrthogonalAxis.Y, 2.0,
+                        new LineSegment.ParallelAxisBounds(0.0, 3.0)
+                )
+        );
+        // Act
+        var adjacencyList = adjacencyFinder.findAll(rect1, rect2);
+        // Assert
+        assertEquals(3, adjacencyList.length);
+        assertThat(adjacencyList).anyMatch(adjacency -> {
+            return adjacency.equals(expectedLeftAdjacency);
+        });
+        assertThat(adjacencyList).anyMatch(adjacency -> {
+            return adjacency.equals(expectedRightAdjacency);
+        });
+        assertThat(adjacencyList).anyMatch(adjacency -> {
+            return adjacency.equals(expectedTopAdjacency);
+        });
+    }
+
+    @Test
+    void givenOneRectangleThatIsIdenticalToAnother_whenFindingAdjacencyList_thenAdjacencyTypesAreAllProper() {
+        // Arrange
+        var rect1 = new Rectangle(new Vector2(0.0, 2.0), new Size(3.0, 4.0));
+        var rect2 = new Rectangle(new Vector2(0.0, 2.0), new Size(3.0, 4.0));
+        // Act
+        var adjacencyList = adjacencyFinder.findAll(rect1, rect2);
+        // Assert
+        assertEquals(4, adjacencyList.length);
+        assertThat(adjacencyList).allMatch(adjacency -> {
+           return adjacency.type() == Adjacency.Types.Proper;
+        });
+    }
+
 }

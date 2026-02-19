@@ -17,9 +17,9 @@ public record Rectangle(Vector2 topLeft, Size size) {
     public Rectangle {
         var invariantViolations = new HashMap<String, String[]>();
         if (size.width() <= 0)
-            invariantViolations.put("size.width", new String[] { "The width must be greater than zero."});
+            invariantViolations.put("size.width", new String[] { "The width must be greater than zero"});
         if (size.height() <= 0)
-            invariantViolations.put("size.height", new String[] { "The height must be greater than zero."});
+            invariantViolations.put("size.height", new String[] { "The height must be greater than zero"});
         if (!invariantViolations.isEmpty()) throw new InvalidRectangleException(invariantViolations);
     }
 

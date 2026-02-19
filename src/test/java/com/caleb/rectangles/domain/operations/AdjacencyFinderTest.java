@@ -68,6 +68,11 @@ class AdjacencyFinderTest {
             "0.0, 2.0, 3.0, 4.0,    -1.0, 0.0, 1.0, 3.0,    X, 0.0, -2.0, 0.0",
             "1.0, -2.0, 5.0, 1.0,    0.0, 2.0, 3.0, 4.0,    Y, -2.0, 1.0, 3.0",
 
+            "1.0, 3.0, 1.0, 1.0,    0.0, 2.0, 3.0, 4.0,    Y, 2.0, 1.0, 2.0",
+            "3.0, 2.0, 1.0, 2.0,    0.0, 2.0, 3.0, 4.0,    X, 3.0, 0.0, 2.0",
+            "2.0, -2.0, 1.0, 1.0,   0.0, 2.0, 3.0, 4.0,    Y, -2.0, 2.0, 3.0",
+            "4.0, 6.0, 6.0, 4.0,    10.0, 8.0, 2.0, 8.0,   X, 10.0, 2.0, 6.0"
+
     })
     void givenTwoRectanglesThatArePartiallyAdjacent_whenFindingAdjacency_thenAdjacencyTypeIsPartialAndSegmentIsCorrect(
             double x1, double y1, double w1, double h1,
@@ -91,9 +96,9 @@ class AdjacencyFinderTest {
     @ParameterizedTest
     @CsvSource({
             "0.0, 2.0, 3.0, 4.0,    3.0, 2.0, 1.0, 2.0,    X, 3.0, 0.0, 2.0",
-            "1.0, 3.0, 1.0, 1.0,    0.0, 2.0, 3.0, 4.0,    Y, 2.0, 1.0, 2.0",
+            "0.0, 2.0, 3.0, 4.0,    1.0, 3.0, 1.0, 1.0,    Y, 2.0, 1.0, 2.0",
             "0.0, 2.0, 3.0, 4.0,    -1.0, 1.0, 1.0, 3.0,   X, 0.0, -2.0, 1.0",
-            "2.0, -2.0, 1.0, 1.0,   0.0, 2.0, 3.0, 4.0,    Y, -2.0, 2.0, 3.0",
+            "0.0, 2.0, 3.0, 4.0,    2.0, -2.0, 1.0, 1.0,    Y, -2.0, 2.0, 3.0",
             "0.0, -2.0, 5.0, 1.0,    0.0, 2.0, 3.0, 4.0,   Y, -2.0, 0.0, 3.0"
     })
     void givenOneRectangleThatIsSubLineAdjacentToAnother_whenFindingAdjacency_thenAdjacencyTypeIsSubLineAndSegmentIsCorrect(

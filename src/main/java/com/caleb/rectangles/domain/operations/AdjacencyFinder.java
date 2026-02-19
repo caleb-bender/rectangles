@@ -36,16 +36,14 @@ public class AdjacencyFinder implements IAdjacencyFinder {
     }
 
     private Optional<LineSegment> getSubLineSegment(LineSegment segment1, LineSegment segment2) {
-        if (segment1.lowerAndUpperBoundaryIsBetween(segment2) ||
-            segment2.lowerAndUpperBoundaryIsBetween(segment1)) {
+        if (segment2.lowerAndUpperBoundaryIsBetween(segment1)) {
             return getLineSegment(segment1, segment2);
         }
         return Optional.empty();
     }
 
     private Optional<LineSegment> getPartialSegment(LineSegment segment1, LineSegment segment2) {
-        if (segment1.lowerOrUpperBoundaryIsBetween(segment2) ||
-                segment2.lowerOrUpperBoundaryIsBetween(segment1)) {
+        if (segment1.lowerOrUpperBoundaryIsBetween(segment2)) {
             return getLineSegment(segment1, segment2);
         }
         return Optional.empty();

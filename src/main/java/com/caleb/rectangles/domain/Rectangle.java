@@ -4,6 +4,11 @@ import java.util.HashMap;
 
 public record Rectangle(Vector2 topLeft, Size size) {
 
+    public static final int TOP_SEGMENT = 0;
+    public static final int RIGHT_SEGMENT = 1;
+    public static final int BOTTOM_SEGMENT = 2;
+    public static final int LEFT_SEGMENT = 3;
+
     /**
      * Creates a Rectangle object
      * @param topLeft The coordinates of the top left corner
@@ -18,6 +23,10 @@ public record Rectangle(Vector2 topLeft, Size size) {
         if (!invariantViolations.isEmpty()) throw new InvalidRectangleException(invariantViolations);
     }
 
+    /**
+     * Returns all segments of rectangle in the order top, right, bottom, left
+     * @return segments
+     */
     public LineSegment[] segments() {
         var leftX = topLeft.x();
         var rightX = leftX + size.width();
@@ -40,5 +49,33 @@ public record Rectangle(Vector2 topLeft, Size size) {
                 new LineSegment.ParallelAxisBounds(bottomY, topY)
         );
         return new LineSegment[]{ top, right, bottom, left };
+    }
+
+    /**
+     * Checks if the current rectangle contains another (inclusive)
+     * @param rectangle
+     * @return true if rectangle is within bounds (inclusive) and false if not
+     */
+    public boolean contains(Rectangle rectangle) {
+        var otherSegments = rectangle.segments();
+
+        var topIsContained = isWithinVerticalBounds(otherSegments[TOP_SEGMENT]);
+        var rightIsContained = isWithinHorizontalBounds(otherSegments[RIGHT_SEGMENT]);
+        var bottomIsContained = isWithinVerticalBounds(otherSegments[BOTTOM_SEGMENT]);
+        var leftIsContained = isWithinHorizontalBounds(otherSegments[LEFT_SEGMENT]);
+
+        return topIsContained && rightIsContained && bottomIsContained && leftIsContained;
+    }
+
+    boolean isWithinHorizontalBounds(LineSegment otherSegment) {
+        var thisSegments = segments();
+        return otherSegment.constant() >= thisSegments[Rectangle.LEFT_SEGMENT].constant()
+                && otherSegment.constant() <= thisSegments[Rectangle.RIGHT_SEGMENT].constant();
+    }
+
+    boolean isWithinVerticalBounds(LineSegment otherSegment) {
+        var thisSegments = segments();
+        return otherSegment.constant() >= thisSegments[Rectangle.BOTTOM_SEGMENT].constant()
+                && otherSegment.constant() <= thisSegments[Rectangle.TOP_SEGMENT].constant();
     }
 }

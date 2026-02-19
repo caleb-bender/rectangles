@@ -13,13 +13,13 @@ class LineSegmentTest {
     void whenCreatingLineSegment_thenItHasCorrectParallelAxisAndOrthogonalBounds() {
         // Arrange
         var axis = LineSegment.OrthogonalAxis.X;
-        var continuousValue = 2.0;
+        var constant = 2.0;
         var bounds = new LineSegment.ParallelAxisBounds(1, 3);
         // Act
-        var lineSegment = new LineSegment(axis, continuousValue, bounds);
+        var lineSegment = new LineSegment(axis, constant, bounds);
         // Assert
         assertEquals(axis, lineSegment.axis());
-        assertEquals(continuousValue, lineSegment.continuousValue());
+        assertEquals(constant, lineSegment.constant());
         assertEquals(bounds, lineSegment.bounds());
     }
 
@@ -67,13 +67,13 @@ class LineSegmentTest {
             "X, -2.0, 2.0, 3.0,    Y, 3.0, -3.0, -1.0,  -2.0, 3.0"
     })
     void givenTwoOrthogonalOverlappingLines_whenGettingIntersection_thenTheIntersectionExistsAndIsCommutative(
-            LineSegment.OrthogonalAxis axis1, double continuousValue1, double lower1, double upper1,
-            LineSegment.OrthogonalAxis axis2, double continuousValue2, double lower2, double upper2,
+            LineSegment.OrthogonalAxis axis1, double constant1, double lower1, double upper1,
+            LineSegment.OrthogonalAxis axis2, double constant2, double lower2, double upper2,
             double ix, double iy
     ) {
         // Arrange
-        var line1 = new LineSegment(axis1, continuousValue1, new LineSegment.ParallelAxisBounds(lower1, upper1));
-        var line2 = new LineSegment(axis2, continuousValue2, new LineSegment.ParallelAxisBounds(lower2, upper2));
+        var line1 = new LineSegment(axis1, constant1, new LineSegment.ParallelAxisBounds(lower1, upper1));
+        var line2 = new LineSegment(axis2, constant2, new LineSegment.ParallelAxisBounds(lower2, upper2));
         var expectedIntersection = new Vector2(ix, iy);
         // Act
         var line1ThroughLine2 = line1.intersectionWith(line2);

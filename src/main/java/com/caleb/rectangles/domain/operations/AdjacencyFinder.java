@@ -5,8 +5,9 @@ import com.caleb.rectangles.domain.Rectangle;
 
 import java.util.Optional;
 
-public class AdjacencyFinder {
-    public Optional<Adjacency> Find(Rectangle rect1, Rectangle rect2) {
+public class AdjacencyFinder implements IAdjacencyFinder {
+
+    public Optional<Adjacency> find(Rectangle rect1, Rectangle rect2) {
 
         for (LineSegment segment1 : rect1.segments()) {
             for (LineSegment segment2 : rect2.segments()) {
@@ -28,11 +29,11 @@ public class AdjacencyFinder {
         return Optional.of(new Adjacency(type, segment));
     }
 
-    boolean segmentsShareOrthogonalAxisAndConstant(LineSegment segment1, LineSegment segment2) {
+    private boolean segmentsShareOrthogonalAxisAndConstant(LineSegment segment1, LineSegment segment2) {
         return segment1.axis() == segment2.axis() && segment1.constant() == segment2.constant();
     }
 
-    Optional<LineSegment> getSubLineSegment(LineSegment segment1, LineSegment segment2) {
+    private Optional<LineSegment> getSubLineSegment(LineSegment segment1, LineSegment segment2) {
         if (segment1.lowerAndUpperBoundaryIsBetween(segment2) ||
             segment2.lowerAndUpperBoundaryIsBetween(segment1)) {
             return getLineSegment(segment1, segment2);
@@ -40,7 +41,7 @@ public class AdjacencyFinder {
         return Optional.empty();
     }
 
-    Optional<LineSegment> getPartialSegment(LineSegment segment1, LineSegment segment2) {
+    private Optional<LineSegment> getPartialSegment(LineSegment segment1, LineSegment segment2) {
         if (segment1.lowerOrUpperBoundaryIsBetween(segment2) ||
                 segment2.lowerOrUpperBoundaryIsBetween(segment1)) {
             return getLineSegment(segment1, segment2);

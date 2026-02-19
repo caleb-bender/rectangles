@@ -26,7 +26,7 @@ class AdjacencyFinderTest {
         var rect1 = new Rectangle(new Vector2(x1, y1), new Size(w1, h1));
         var rect2 = new Rectangle(new Vector2(x2, y2), new Size(w2, h2));
         // Act
-        var adjacency = adjacencyFinder.Find(rect1, rect2);
+        var adjacency = adjacencyFinder.find(rect1, rect2);
         // Assert
         assertTrue(adjacency.isEmpty());
     }
@@ -49,7 +49,7 @@ class AdjacencyFinderTest {
         var rect2 = new Rectangle(new Vector2(x2, y2), new Size(w2, h2));
         var expectedSegment = new LineSegment(axis, constant, new LineSegment.ParallelAxisBounds(lower, upper));
         // Act
-        var adjacency = adjacencyFinder.Find(rect1, rect2);
+        var adjacency = adjacencyFinder.find(rect1, rect2);
         // Assert
         assertTrue(adjacency.isPresent());
         assertEquals(Adjacency.Types.Proper, adjacency.get().type());
@@ -75,7 +75,7 @@ class AdjacencyFinderTest {
         var rect2 = new Rectangle(new Vector2(x2, y2), new Size(w2, h2));
         var expectedSegment = new LineSegment(axis, constant, new LineSegment.ParallelAxisBounds(lower, upper));
         // Act
-        var adjacency = adjacencyFinder.Find(rect1, rect2);
+        var adjacency = adjacencyFinder.find(rect1, rect2);
         // Assert
         assertTrue(adjacency.isPresent());
         assertEquals(Adjacency.Types.Partial, adjacency.get().type());
@@ -101,7 +101,7 @@ class AdjacencyFinderTest {
         var rect2 = new Rectangle(new Vector2(x2, y2), new Size(w2, h2));
         var expectedSegment = new LineSegment(axis, constant, new LineSegment.ParallelAxisBounds(lower, upper));
         // Act
-        var adjacency = adjacencyFinder.Find(rect1, rect2);
+        var adjacency = adjacencyFinder.find(rect1, rect2);
         // Assert
         assertTrue(adjacency.isPresent());
         assertEquals(Adjacency.Types.SubLine, adjacency.get().type());

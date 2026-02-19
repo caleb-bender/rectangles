@@ -25,7 +25,7 @@ class IntersectionFinderTest {
         var rectangleA = new Rectangle(new Vector2(0, 0), new Size(1,1));
         var rectangleB = new Rectangle(new Vector2(2, 0), new Size(1,1));
         // Act
-        var intersections = intersectionFinder.FindAll(rectangleA, rectangleB);
+        var intersections = intersectionFinder.findAll(rectangleA, rectangleB);
         // Assert
         assertEquals(0, intersections.length);
     }
@@ -45,7 +45,7 @@ class IntersectionFinderTest {
         var rectangleA = new Rectangle(new Vector2(x1, y1), new Size(w1, h1));
         var rectangleB = new Rectangle(new Vector2(x2, y2), new Size(w2, h2));
         // Act
-        var intersections = intersectionFinder.FindAll(rectangleA, rectangleB);
+        var intersections = intersectionFinder.findAll(rectangleA, rectangleB);
         // Assert
         assertEquals(2, intersections.length);
     }
@@ -65,7 +65,7 @@ class IntersectionFinderTest {
         var rectangleA = new Rectangle(new Vector2(x1, y1), new Size(w1, h1));
         var rectangleB = new Rectangle(new Vector2(x2, y2), new Size(w2, h2));
         // Act
-        var intersections = intersectionFinder.FindAll(rectangleA, rectangleB);
+        var intersections = intersectionFinder.findAll(rectangleA, rectangleB);
         // Assert
         assertEquals(1, intersections.length);
     }
@@ -85,7 +85,7 @@ class IntersectionFinderTest {
         var rectangleA = new Rectangle(new Vector2(x1, y1), new Size(w1, h1));
         var rectangleB = new Rectangle(new Vector2(x2, y2), new Size(w2, h2));
         // Act
-        var intersections = intersectionFinder.FindAll(rectangleA, rectangleB);
+        var intersections = intersectionFinder.findAll(rectangleA, rectangleB);
         // Assert
         assertEquals(3, intersections.length);
     }
@@ -96,7 +96,7 @@ class IntersectionFinderTest {
         var rectangleA = new Rectangle(new Vector2(0.0, 0.0), new Size(3.0, 2.0));
         var rectangleB = new Rectangle(new Vector2(0.0, 0.0), new Size(3.0, 2.0));
         // Act
-        var intersections = intersectionFinder.FindAll(rectangleA, rectangleB);
+        var intersections = intersectionFinder.findAll(rectangleA, rectangleB);
         // Assert
         assertEquals(4, intersections.length);
     }
@@ -118,7 +118,7 @@ class IntersectionFinderTest {
         var rectangleB = new Rectangle(new Vector2(x2, y2), new Size(w2, h2));
         var expectedIntersections = new Vector2[] { new Vector2(ix1, iy1) };
         // Act
-        var intersections = intersectionFinder.FindAll(rectangleA, rectangleB);
+        var intersections = intersectionFinder.findAll(rectangleA, rectangleB);
         // Assert
         assertContainsExactlyExpectedIntersections(intersections, expectedIntersections);
     }
@@ -141,7 +141,7 @@ class IntersectionFinderTest {
         var rectangleB = new Rectangle(new Vector2(x2, y2), new Size(w2, h2));
         var expectedIntersections = new Vector2[] { new Vector2(ix1, iy1), new Vector2(ix2, iy2) };
         // Act
-        var intersections = intersectionFinder.FindAll(rectangleA, rectangleB);
+        var intersections = intersectionFinder.findAll(rectangleA, rectangleB);
         // Assert
         assertContainsExactlyExpectedIntersections(intersections, expectedIntersections);
     }
@@ -167,7 +167,7 @@ class IntersectionFinderTest {
                 new Vector2(ix1, iy1), new Vector2(ix2, iy2), new Vector2(ix3, iy3)
         };
         // Act
-        var intersections = intersectionFinder.FindAll(rectangleA, rectangleB);
+        var intersections = intersectionFinder.findAll(rectangleA, rectangleB);
         // Assert
         assertContainsExactlyExpectedIntersections(intersections, expectedIntersections);
     }
@@ -193,7 +193,7 @@ class IntersectionFinderTest {
                 new Vector2(ix4, iy4)
         };
         // Act
-        var intersections = intersectionFinder.FindAll(rectangleA, rectangleB);
+        var intersections = intersectionFinder.findAll(rectangleA, rectangleB);
         // Assert
         assertContainsExactlyExpectedIntersections(intersections, expectedIntersections);
     }
@@ -207,8 +207,8 @@ class IntersectionFinderTest {
                 new Vector2(-1.0, 1.0), new Vector2(2.0, 0.0)
         };
         // Act
-        var intersectionsAToB = intersectionFinder.FindAll(rectangleA, rectangleB);
-        var intersectionsBToA = intersectionFinder.FindAll(rectangleB, rectangleA);
+        var intersectionsAToB = intersectionFinder.findAll(rectangleA, rectangleB);
+        var intersectionsBToA = intersectionFinder.findAll(rectangleB, rectangleA);
         // Assert
         assertContainsExactlyExpectedIntersections(intersectionsAToB, expectedIntersections);
         assertContainsExactlyExpectedIntersections(intersectionsBToA, expectedIntersections);

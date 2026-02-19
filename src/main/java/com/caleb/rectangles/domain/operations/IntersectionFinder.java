@@ -6,15 +6,9 @@ import com.caleb.rectangles.domain.Vector2;
 
 import java.util.HashSet;
 
-public class IntersectionFinder {
+public class IntersectionFinder implements  IIntersectionFinder {
 
-    /**
-     * Finds all the intersections between rectangles
-     * @param rectangleA
-     * @param rectangleB
-     * @return intersections
-     */
-    public Vector2[] FindAll(Rectangle rectangleA, Rectangle rectangleB) {
+    public Vector2[] findAll(Rectangle rectangleA, Rectangle rectangleB) {
         var intersections = new HashSet<Vector2>();
 
         for (LineSegment segmentA : rectangleA.segments()) {
